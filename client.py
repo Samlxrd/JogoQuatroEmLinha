@@ -1,9 +1,9 @@
 import xmlrpc.client
 
-# Conexão com o servidor
-server = xmlrpc.client.ServerProxy('http://localhost:8000')
+def main():
+    # Conexão com o servidor
+    server = xmlrpc.client.ServerProxy('http://localhost:8000')
 
-if __name__ == '__main__':
     
     # Jogadores escolhem entre o símbolo 'X' e 'O'.
     while True:
@@ -31,12 +31,15 @@ if __name__ == '__main__':
             if col < 0 or col > 8:
                 print('Valor fora do intervalo.')
                 continue
+            
         except ValueError:
             print('Caractere invalido.')
             continue
         
+        # Verifica se é o turno do jogador.
         if server.verify_turn(player):
 
+            # Verifica se a posição é válida.
             while True:
                 if server.make_move(col,player):
                     break
@@ -45,6 +48,7 @@ if __name__ == '__main__':
 
             print(server.print_board())
 
+            # Ao realizar movimento, verifica se o jogador completou quatro em linha.
             if server.check_win(player):
                 print('Parabéns, você ganhou!')
                 break
@@ -52,9 +56,13 @@ if __name__ == '__main__':
         else:
             print('Vez do adversário.')
 
-        # Aguardando adversário jogar
         print('Aguardando jogada do adversário.')
+        
+        # Após realizar a jogada, fica em loop aguardando adversário jogar
         while True:
             if server.verify_turn(player):
                 break
         print(server.print_board())
+
+if __name__ == '__main__':
+    main()
