@@ -18,7 +18,6 @@ with SimpleXMLRPCServer(('localhost', 8000), requestHandler=RequestHandler) as s
     def register_player(player):
         if player not in players:
             players.append(player)
-            print("Novo jogador.")
             return True
         return False
     
